@@ -10,10 +10,10 @@ phases:
     commands:
       - echo "Entering build phase..."
       - cd /
-      - ./jfrog rt c rt-server-1 --url=http://13.57.10.242/artifactory --access-token eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJraWQiOiJiajZ2b05LVUJrRFZYU0p6Uk9KdF9ybVBsOV9yWFUtOXh4MXN0RVdSY1ZnIn0.eyJzdWIiOiJqZnJ0QDAxZDd6bjQydzJkNzl3MHNhOTI3YjgxZDM1XC91c2Vyc1wvdXNlciIsInNjcCI6Im1lbWJlci1vZi1ncm91cHM6cmVhZGVycyBhcGk6KiIsImF1ZCI6ImpmcnRAMDFkN3puNDJ3MmQ3OXcwc2E5MjdiODFkMzUiLCJpc3MiOiJqZnJ0QDAxZDd6bjQydzJkNzl3MHNhOTI3YjgxZDM1IiwiZXhwIjoxNTU3MzUzMzg5LCJpYXQiOjE1NTczNDk3ODksImp0aSI6ImViOWFiOGI1LTQ3Y2EtNGU5Ny04YjA1LWU2YTRjOWNlY2M0YiJ9.aZMK4mJbV2B0JoIuXECLJNtYFr8Y1HZJMveEQQrgpXExTY84E6Jo4L__t2rD8ca53jY1TE5FRz9KOQYkO__QFDU2CxudZHSAEubA6rqc9gE9jexjcFxExDPDYjoFqY7r9XbZdGjqYMqVGvxu24f2Si_03CkM29gxkhWdiCCkEhfhA_0eetlkaqwisrGKdO3ytzcgsTEfCzYKuemCzg0cMjCMUQHl6_UGqtyS5T5nzdW1JEzvrVdqiLS_FBgWCcmMLSMRsqDfFxOJzxBhSAXs0tRtLdJ4WuDGDbCdlEUlBJenl1kRYrrz1J4Z2oNZabdWiHWu1RVUBWxequTikMR0EA
-      - ./jfrog rt ping --server-id=rt-server-1
+      - jfrog rt c rt-server-1 --url=http://13.57.10.242/artifactory --api-key AKCp5cckUWwkCP31i64s8ayR3HVs5GhxJVHdX5AYM1HCugCWSeCto7da2zV1JuB2ZYEPvtPb8
+      - jfrog rt ping --server-id=rt-server-1
       - touch ./largeFile.txt
-      - ./jfrog rt u ./largeFile.txt example-repo-local
+      - jfrog rt u ./largeFile.txt example-repo-local
       - terraform --version
       - dotnet --version
   post_build:

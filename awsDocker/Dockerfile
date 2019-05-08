@@ -244,6 +244,7 @@ RUN set -ex \
 #****************     JFROG     *******************************************************
  
  RUN wget https://dl.bintray.com/jfrog/jfrog-cli-go/1.12.1/jfrog-cli-linux-amd64/jfrog \
- && chmod +x jfrog
+ && chmod +x jfrog \
+ && mv ./jfrog /usr/local/bin/jfrog
 
 #****************     END JFROG     *******************************************************
