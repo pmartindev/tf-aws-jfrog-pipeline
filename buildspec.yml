@@ -1,20 +1,22 @@
 version: 0.2
 phases:
   install:
-    commands:
-      - echo "Entering install phase..."
-      - wget https://dl.bintray.com/jfrog/jfrog-cli-go/1.12.1/jfrog-cli-linux-amd64/jfrog
-      - chmod +x jfrog
+    runtime-versions:
+      dotnet: 2.2
   pre_build:
     commands:
-      - echo "Entering pre build phase..."
+      - echo "Entering build phase..."
   build:
     commands:
       - echo "Entering build phase..."
+      - cd /
       - ./jfrog rt c rt-server-1 --url=http://13.57.10.242/artifactory --user=user --password=SWJecunBqsf8
       - ./jfrog rt ping --server-id=rt-server-1
       - touch ./largeFile.txt
       - ./jfrog rt u ./largeFile.txt example-repo-local
+      - terraform --version
+      - dotnet --version
   post_build:
     commands:
       - echo " Entering post build phase..."
+
