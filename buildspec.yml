@@ -10,7 +10,7 @@ phases:
     commands:
       - echo "Entering build phase..."
       - cd /
-      - jfrog rt c rt-server-1 --url=http://13.57.10.242/artifactory --api-key AKCp5cckUWwkCP31i64s8ayR3HVs5GhxJVHdX5AYM1HCugCWSeCto7da2zV1JuB2ZYEPvtPb8
+      - jfrog rt c rt-server-1 --url=http://13.57.10.242/artifactory --apikey AKCp5cckUWwkCP31i64s8ayR3HVs5GhxJVHdX5AYM1HCugCWSeCto7da2zV1JuB2ZYEPvtPb8
       - jfrog rt ping --server-id=rt-server-1
       - touch ./largeFile.txt
       - jfrog rt u ./largeFile.txt example-repo-local
