@@ -1,0 +1,1 @@
+project-name = "artifactory-test"
