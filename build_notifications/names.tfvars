@@ -1,3 +1,3 @@
-project-name = "artifactory-test"
-account-prefix = "a204309"
-aws-region = "us-west-1"
+project_name = "artifactory-test"
+account_prefix = "a204309"
+aws_region = "us-west-1"

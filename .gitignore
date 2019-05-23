@@ -7,3 +7,4 @@ keys/*
 *.lock.info
 ssh_config
 docker-connect.sh
+*.DS_Store
