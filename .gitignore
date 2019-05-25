@@ -8,3 +8,4 @@ keys/*
 ssh_config
 docker-connect.sh
 *.DS_Store
+.vscode
