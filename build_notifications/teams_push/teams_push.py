@@ -18,13 +18,14 @@ class PipelineData:
 
 def construct_ms_teams_message(BuildPipelineObj, teams_url):
     build_status = "failed"
-    image_url = "https://upload.wikimedia.org/wikipedia/en/thumb/f/ff/SuccessKid.jpg/256px-SuccessKid.jpg"
+    image_url = "https://www.dictionary.com/e/wp-content/uploads/2018/03/thisisfine-1.jpg"
+
     activity_title = "Build Failed"
 
     if BuildPipelineObj.build_passed == True:
         build_status = "succeeded"
         activity_title = "Build Succeeded"
-        image_url = "https://www.dictionary.com/e/wp-content/uploads/2018/03/thisisfine-1.jpg"
+        image_url = "https://upload.wikimedia.org/wikipedia/en/thumb/f/ff/SuccessKid.jpg/256px-SuccessKid.jpg"
 
     ms_Teams_Message = pymsteams.connectorcard(teams_url)
     ms_Message_Section = pymsteams.cardsection()
@@ -32,10 +33,10 @@ def construct_ms_teams_message(BuildPipelineObj, teams_url):
     ms_Message_Section.activityTitle(activity_title)
     ms_Message_Section.activityImage(image_url)
     ms_Teams_Message.addSection(ms_Message_Section)
-    ms_Teams_Message.text("Build " + BuildPipelineObj.project_name + " has " + build_status + "\n" +
-                          "Build ARN: " + BuildPipelineObj.build_arn + "\n" +
-                          "Start Time: " + BuildPipelineObj.build_start_time + "\n" +
-                          "Logs URL: " + BuildPipelineObj.pipeline_logs_url
+    ms_Teams_Message.text("Build " + BuildPipelineObj.project_name + " has " + build_status + "   \n" +
+                          "Build ARN: " + BuildPipelineObj.build_arn + "   \n" +
+                          "Start Time: " + BuildPipelineObj.build_start_time + "   \n" +
+                          "Logs URL: " + "<a href=\"" + BuildPipelineObj.pipeline_logs_url + "\">" + BuildPipelineObj.pipeline_logs_url + "</a>"
                           )
 
     return ms_Teams_Message
