@@ -1,4 +1,5 @@
 data "aws_caller_identity" "current_caller" {}
+
 variable "project_name" {
   type = "string"
 }
@@ -8,6 +9,10 @@ variable "account_prefix" {
 }
 
 variable "aws_region" {
+  type = "string"
+}
+
+variable "teams_url" {
   type = "string"
 }
 
@@ -23,7 +28,7 @@ resource "aws_sns_topic" "build_status" {
 }
 
 resource "aws_sns_topic_policy" "build_status_topic_policy" {
-  arn = "${aws_sns_topic.build_status.arn}"
+  arn    = "${aws_sns_topic.build_status.arn}"
   policy = "${data.aws_iam_policy_document.cloudwatch_submit_sns.json}"
 }
 
@@ -43,11 +48,18 @@ data "archive_file" "teams_push" {
 }
 
 resource "aws_lambda_function" "teams_lambda_function" {
-  role             = "${aws_iam_role.lambda_iam_role.arn}"
-  runtime          = "python3.7"
-  handler          = "teams_push.lambda_handler"
-  function_name    = "teams_push"
-  filename         = "teams_push.zip"
+  role          = "${aws_iam_role.lambda_iam_role.arn}"
+  runtime       = "python3.7"
+  handler       = "teams_push.lambda_handler"
+  function_name = "teams_push"
+  filename      = "teams_push.zip"
+
+  environment = {
+    variables = {
+      TEAMS_URL = "${var.teams_url}"
+    }
+  }
+
   source_code_hash = "${data.archive_file.teams_push.output_base64sha256}"
 }
 
@@ -65,11 +77,14 @@ resource "aws_lambda_permission" "lambda_allow_sns" {
 resource "aws_cloudwatch_event_rule" "codebuild_trigger" {
   name        = "${var.account_prefix}-codebuild-trigger"
   description = "Posts the status of a build to an sns topic."
-  is_enabled = true
+  is_enabled  = true
+
   depends_on = [
-    "aws_lambda_function.teams_lambda_function"
+    "aws_lambda_function.teams_lambda_function",
   ]
+
   role_arn = "${aws_iam_role.cloudwatch_event_iam_role.arn}"
+
   event_pattern = <<PATTERN
 {
   "source": [
@@ -147,7 +162,7 @@ data "aws_iam_policy_document" "cloudwatch_log_group_lambda" {
     ]
 
     resources = [
-      "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current_caller.account_id}:log-group:/aws/lambda/${aws_lambda_function.teams_lambda_function.function_name}:*"
+      "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current_caller.account_id}:log-group:/aws/lambda/${aws_lambda_function.teams_lambda_function.function_name}:*",
     ]
   }
 }
@@ -157,10 +172,12 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals = {
       type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
+
     effect = "Allow"
   }
 }
@@ -170,10 +187,12 @@ data "aws_iam_policy_document" "cloudwatch_assume_role_policy" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals = {
       type        = "Service"
       identifiers = ["events.amazonaws.com"]
     }
+
     effect = "Allow"
   }
 }
@@ -183,10 +202,12 @@ data "aws_iam_policy_document" "sns_assume_role_policy" {
     actions = [
       "sts:AssumeRole",
     ]
+
     principals = {
       type        = "Service"
       identifiers = ["sns.amazonaws.com"]
     }
+
     effect = "Allow"
   }
 }
@@ -195,11 +216,13 @@ data "aws_iam_policy_document" "cloudwatch_event_pass_role" {
   statement {
     actions = [
       "events:*",
-      "iam:PassRole"
+      "iam:PassRole",
     ]
+
     resources = [
-      "*"
+      "*",
     ]
+
     effect = "Allow"
   }
 }
@@ -207,17 +230,21 @@ data "aws_iam_policy_document" "cloudwatch_event_pass_role" {
 data "aws_iam_policy_document" "cloudwatch_submit_sns" {
   statement {
     actions = [
-      "sns:Publish"
+      "sns:Publish",
     ]
+
     principals = {
       type        = "Service"
       identifiers = ["events.amazonaws.com"]
     }
+
     resources = [
-      "${aws_sns_topic.build_status.arn}"
+      "${aws_sns_topic.build_status.arn}",
     ]
+
     effect = "Allow"
   }
+
   statement {
     sid    = "__default_statement_ID"
     effect = "Allow"

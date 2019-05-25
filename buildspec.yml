@@ -13,6 +13,7 @@ phases:
      # - jfrog rt ping --server-id=rt-server-1
       - touch ./largeFile.txt
      # - jfrog rt u ./largeFile.txt example-repo-local
+      - terrafor
       - terraform --version
       - dotnet --version
   post_build:
